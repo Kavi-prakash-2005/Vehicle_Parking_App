@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Parking Spot</title>
+</head>
+<body>
+    <h2>Book the Parking Spot</h2>
+
+    <form method="POST">
+        <p><strong>Lot Name:</strong> {{ lot.prime_location_name }}</p>
+        <p><strong>Spot ID:</strong> {{ spot.id }}</p>
+        <p><strong>Lot ID:</strong> {{ lot.id }}</p>
+        <p><strong>User ID:</strong> {{ user_id }}</p>
+
+        <label>Vehicle Number:</label><br>
+        <input type="text" name="vehicle_no" required><br><br>
+
+        <button type="submit">Reserve</button>
+        <a href="/user/dashboard">Cancel</a>
+    </form>
+</body>
+</html>

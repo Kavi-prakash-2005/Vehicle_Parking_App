@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><title>Search Parking</title></head>
+<body>
+    <h2>Search Parking Lots</h2>
+
+    <form method="POST">
+        <label>Search by:</label>
+        <select name="category">
+            <option value="user">User ID</option>
+            <option value="location">Location</option>
+        </select>
+
+        <input type="text" name="search_query" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if lots %}
+        <h3>Search Results:</h3>
+        {% for lot in lots %}
+            <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+                <h4>{{ lot.prime_location_name }}</h4>
+                <p>Spots: {{ lot.maximum_number_of_spots }} | ₹{{ lot.price_per_hour }}/hr</p>
+                <a href="/admin/lots/{{ lot.id }}/spots">View Spots</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <br><a href="/admin">← Back to Dashboard</a>
+</body>
+</html>

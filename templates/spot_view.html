@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head><title>Spot View</title></head>
+<body>
+    <h2>View/Delete Parking Spot</h2>
+    <p><strong>ID:</strong> {{ spot.id }}</p>
+    <p>
+        <strong>Status:</strong> 
+        {% if spot.status == 'R' %}
+            <a href="/admin/spot/{{ spot.id }}/details" style="color: red;">Occupied</a>
+        {% else %}
+            Available
+        {% endif %}
+    </p>
+
+    {% if spot.status == 'A' %}
+        <a href="/admin/spot/{{ spot.id }}/delete" onclick="return confirm('Are you sure?')">🗑 Delete</a>
+    {% else %}
+        <p style="color:red;">Cannot delete an occupied spot.</p>
+    {% endif %}
+    <br><br>
+    <a href="/admin/lots/{{ spot.lot_id }}/spots">Close</a>
+</body>
+</html>

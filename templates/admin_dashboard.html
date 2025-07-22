@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to Admin Dashboard</h1>
+    <p>
+        <a href="/admin/lots">View Lots</a> |
+        <a href="/admin/lots/create">+ Add Lot</a> |
+        <a href="admin/users">Users</a> |
+        <a href="admin/search">Summary</a> |
+        <a href="login">Logout</a>
+    </p>
+
+    <h2>Parking Lots Overview</h2>
+    {% for lot in lots %}
+        <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+            <h3>{{ lot.prime_location_name }}</h3>
+            <p>Spots: {{ lot.maximum_number_of_spots }} | 
+               Price/hour: ₹{{ lot.price_per_hour }}</p>
+            <a href="/admin/lots/{{ lot.id }}/spots">View Spots</a> |
+            <a href="/admin/lots/delete/{{ lot.id }}">Delete</a>
+        </div>
+    {% endfor %}
+</body>
+</html>

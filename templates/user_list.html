@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head><title>Registered Users</title></head>
+<body>
+    <h2>Registered Users</h2>
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Full Name</th>
+            <th>Address</th>
+            <th>Pin Code</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.pin_code }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br><a href="/admin">← Back to Dashboard</a>
+</body>
+</html>

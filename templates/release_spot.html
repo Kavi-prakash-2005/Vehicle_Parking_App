@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Release Parking Spot</title>
+</head>
+<body>
+    <h2>Release Parking Spot</h2>
+
+    <form method="POST">
+        <p><strong>Spot ID:</strong> {{ spot.id }}</p>
+        <p><strong>Vehicle Number:</strong> XXXX</p> <!-- replace if tracked -->
+        <p><strong>Parking Time:</strong> {{ res.parking_timestamp }}</p>
+        <p><strong>Releasing Time:</strong> {{ res.leaving_timestamp or "Will be set now" }}</p>
+        <p><strong>Estimated Cost:</strong> Calculated on release</p>
+
+        <button type="submit">Release</button>
+        <a href="/user/dashboard">Cancel</a>
+    </form>
+</body>
+</html>

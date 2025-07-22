@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parking Lots</title>
+</head>
+<body>
+    <h2>All Parking Lots</h2>
+    <a href="/admin/lots/create">+ Add Lot</a>
+    <br><br>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>ID</th>
+            <th>Location</th>
+            <th>Spots</th>
+            <th>Price/hr</th>
+            <th>Actions</th>
+        </tr>
+        {% for lot in lots %}
+        <tr>
+            <td>{{ lot.id }}</td>
+            <td>{{ lot.prime_location_name }}</td>
+            <td>{{ lot.maximum_number_of_spots }}</td>
+            <td>₹{{ lot.price_per_hour }}</td>
+            <td>
+                <a href="/admin/lots/{{ lot.id }}/spots">View</a> |
+                <a href="/admin/lots/delete/{{ lot.id }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br><a href="/admin">← Back to Dashboard</a>
+</body>
+</html>

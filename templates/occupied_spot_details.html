@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>Occupied Spot Details</title></head>
+<body>
+    <h2>Occupied Parking Spot Details</h2>
+
+    <p><strong>ID:</strong> {{ spot.id }}</p>
+    <p><strong>Customer ID:</strong> {{ reservation.user_id }}</p>
+    <p><strong>Date/Time of Parking:</strong> {{ reservation.parking_timestamp }}</p>
+    <p><strong>Estimated Cost:</strong> ₹{{ reservation.parking_cost or '—' }}</p>
+    <!-- Add more fields if available, e.g. vehicle no -->
+
+    <br><a href="/admin/spot/{{ spot.id }}">← Back</a>
+</body>
+</html>
