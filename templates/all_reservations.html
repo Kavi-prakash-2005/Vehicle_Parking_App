@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Parking Reservations</title>
+</head>
+<body>
+    <h2>All Parking Records</h2>
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>ID</th>
+            <th>User ID</th>
+            <th>Spot ID</th>
+            <th>Lot</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Duration</th>
+            <th>Cost (₹)</th>
+        </tr>
+        {% for r in reservations %}
+        <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.user_id }}</td>
+            <td>{{ r.spot_id }}</td>
+            <td>{{ r.spot.lot.prime_location_name }}</td>
+            <td>{{ r.parking_timestamp }}</td>
+            <td>{{ r.leaving_timestamp or "-" }}</td>
+            <td>
+                {% if r.leaving_timestamp %}
+                    {% set duration = (r.leaving_timestamp - r.parking_timestamp).total_seconds() / 3600 %}
+                    {{ duration|round(2) }} hr
+                {% else %}
+                    In Use
+                {% endif %}
+            </td>
+            <td>{{ r.parking_cost or "-" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br><a href="/admin">← Back to Dashboard</a>
+</body>
+</html>

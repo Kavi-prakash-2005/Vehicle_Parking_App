@@ -89,3 +89,7 @@ def setup_admin_routes(app):
         db.session.commit()
         return redirect(f"/admin/lots/{spot.lot_id}/spots")
 
+    @app.route("/admin/reservations")
+    def all_reservations():
+        reservations = Reservation.query.order_by(Reservation.parking_timestamp.desc()).all()
+        return render_template("all_reservations.html", reservations=reservations)

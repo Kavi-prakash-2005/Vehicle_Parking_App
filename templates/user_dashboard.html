@@ -18,6 +18,8 @@
             <th>Spot ID</th>
             <th>Parking Time</th>
             <th>Leaving Time</th>
+            <th>Duration</th>
+            <th>Cost</th>
             <th>Action</th>
         </tr>
         {% for r in reservations %}
@@ -26,16 +28,26 @@
             <td>{{ r.spot.lot.prime_location_name }}</td>
             <td>{{ r.spot.id }}</td>
             <td>{{ r.parking_timestamp }}</td>
-            <td>{{ r.leaving_timestamp or "-" }}</td>
+            <td>{{ r.leaving_timestamp or "—" }}</td>
+            <td>
+                {% if r.leaving_timestamp %}
+                    {% set duration = (r.leaving_timestamp - r.parking_timestamp).total_seconds() / 3600 %}
+                    {{ duration|round(2) }} hr
+                {% else %}
+                    Ongoing
+                {% endif %}
+            </td>
+            <td>₹{{ r.parking_cost or "—" }}</td>
             <td>
                 {% if not r.leaving_timestamp %}
                     <a href="/user/release/{{ r.id }}">Release</a>
                 {% else %}
-                    Parked Out
+                    -
                 {% endif %}
             </td>
         </tr>
         {% endfor %}
+
     </table>
 </body>
 </html>

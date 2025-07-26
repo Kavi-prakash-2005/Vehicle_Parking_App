@@ -95,12 +95,12 @@ def setup_user_routes(app):
         if request.method == "POST":
             res.leaving_timestamp = datetime.now()
             duration = (res.leaving_timestamp - res.parking_timestamp).total_seconds() / 3600
-            res.parking_cost = round(duration * spot.lot.price_per_hour, 2)
+            rate = spot.lot.price_per_hour
+            res.parking_cost = round(duration * rate, 2)
             spot.status = 'A'
             db.session.commit()
             return redirect("/user/dashboard")
 
         return render_template("release_spot.html", res=res, spot=spot)
-
 
 
