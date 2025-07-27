@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Summary</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h2>Your Parking Usage Summary</h2>
+
+<canvas id="userChart" width="600" height="300"></canvas>
+
+<script>
+    const usageLabels = JSON.parse('{{ usage | map(attribute=0) | list | tojson | safe }}');
+    const usageCounts = JSON.parse('{{ usage | map(attribute=1) | list | tojson | safe }}');
+
+    new Chart(document.getElementById('userChart'), {
+        type: 'bar',
+        data: {
+            labels: usageLabels,
+            datasets: [{
+                label: 'Parking Spots Used (per Lot)',
+                data: usageCounts,
+                backgroundColor: 'rgba(153, 102, 255, 0.7)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<br><a href="/user/dashboard">← Back to Dashboard</a>
+</body>
+</html>

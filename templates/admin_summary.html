@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Summary</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Revenue by Parking Lot</h2>
+    <canvas id="revenueChart" width="600" height="300"></canvas>
+
+    <h2>Spot Status by Lot</h2>
+    <canvas id="spotChart" width="600" height="300"></canvas>
+
+    <script>
+        const revenueLabels = JSON.parse('{{ revenue_data | map(attribute=0) | list | tojson | safe }}');
+        const revenueValues = JSON.parse('{{ revenue_data | map(attribute=1) | list | tojson | safe }}');
+
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'bar',
+            data: {
+                labels: revenueLabels,
+                datasets: [{
+                    label: 'Total Revenue (₹)',
+                    data: revenueValues,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const spotLabels = JSON.parse('{{ spot_data | map(attribute="lot") | list | tojson | safe }}');
+        const occupied = JSON.parse('{{ spot_data | map(attribute="occupied") | list | tojson | safe }}');
+        const available = JSON.parse('{{ spot_data | map(attribute="available") | list | tojson | safe }}');
+
+        new Chart(document.getElementById('spotChart'), {
+            type: 'bar',
+            data: {
+                labels: spotLabels,
+                datasets: [
+                    {
+                        label: 'Occupied',
+                        data: occupied,
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                    },
+                    {
+                        label: 'Available',
+                        data: available,
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+<br><a href="/admin">← Back to Dashboard</a>

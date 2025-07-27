@@ -1,5 +1,6 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for , session
 from models.model import db, ParkingLot, ParkingSpot, User, Reservation
+from sqlalchemy.sql import func
 
 def setup_admin_routes(app):
 
@@ -93,3 +94,30 @@ def setup_admin_routes(app):
     def all_reservations():
         reservations = Reservation.query.order_by(Reservation.parking_timestamp.desc()).all()
         return render_template("all_reservations.html", reservations=reservations)
+    @app.route("/admin/summary")
+    def admin_summary():
+        if session.get("role") != "admin":
+            return redirect("/login")
+        
+        revenue_data = db.session.query(
+            ParkingLot.prime_location_name,
+            func.sum(Reservation.parking_cost)
+        ).select_from(Reservation) \
+         .join(ParkingSpot, Reservation.spot_id == ParkingSpot.id) \
+         .join(ParkingLot, ParkingSpot.lot_id == ParkingLot.id) \
+         .group_by(ParkingLot.prime_location_name) \
+         .all()
+
+        spot_data = []
+        lots = ParkingLot.query.all()
+        for lot in lots:
+            total = lot.maximum_number_of_spots
+            occupied = sum(1 for spot in lot.spots if spot.status == 'R')
+            available = total - occupied
+            spot_data.append({
+                "lot": lot.prime_location_name,
+                "occupied": occupied,
+                "available": available
+            })
+
+        return render_template("admin_summary.html", revenue_data=revenue_data, spot_data=spot_data)

@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, session, url_for
 from models.model import User, Admin, ParkingLot, ParkingSpot ,Reservation ,db
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from sqlalchemy.sql import func
 
 def setup_user_routes(app):
 
@@ -102,5 +103,24 @@ def setup_user_routes(app):
             return redirect("/user/dashboard")
 
         return render_template("release_spot.html", res=res, spot=spot)
+    
+    @app.route("/user/summary")
+    def user_summary():
+        if "user_id" not in session:
+            return redirect("/login")
+
+        user_id = session.get("user_id")
+
+        usage = db.session.query(
+            ParkingLot.prime_location_name,
+            func.count(Reservation.id)
+        ).select_from(Reservation) \
+         .join(ParkingSpot, Reservation.spot_id == ParkingSpot.id) \
+         .join(ParkingLot, ParkingSpot.lot_id == ParkingLot.id) \
+         .filter(Reservation.user_id == user_id) \
+         .group_by(ParkingLot.prime_location_name) \
+         .all()
+
+        return render_template("user_summary.html", usage=usage)
 
 
