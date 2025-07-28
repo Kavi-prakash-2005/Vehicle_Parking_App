@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head><title>Search Parking</title></head>
+<head>
+    <title>Search Parking</title>
+</head>
 <body>
-    <h2>Search Parking Lots</h2>
+    <h2>Search Parking Lots / Spots</h2>
 
     <form method="POST">
         <label>Search by:</label>
@@ -11,12 +13,22 @@
             <option value="location">Location</option>
         </select>
 
-        <input type="text" name="search_query" required>
+        <input type="text" name="query" required>
         <button type="submit">Search</button>
     </form>
 
-    {% if lots %}
+    {% if results %}
         <h3>Search Results:</h3>
+        {% for spot in results %}
+            <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+                <p><strong>Spot ID:</strong> {{ spot.id }}</p>
+                <p><strong>Status:</strong> {{ spot.status }}</p>
+                <p><strong>Lot:</strong> {{ spot.lot.prime_location_name }}</p>
+                <p><a href="/admin/lots/{{ spot.lot.id }}/spots">View Lot</a></p>
+            </div>
+        {% endfor %}
+    {% elif lots %}
+        <h3>Matching Lots:</h3>
         {% for lot in lots %}
             <div style="border:1px solid #ccc; margin:10px; padding:10px;">
                 <h4>{{ lot.prime_location_name }}</h4>

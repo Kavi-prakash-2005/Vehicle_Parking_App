@@ -29,8 +29,7 @@ def setup_user_routes(app):
 
             if User.query.filter_by(username=username).first():
                 return "Username already exists", 400
-
-            # Passed validation → hash password and save
+            
             password = generate_password_hash(user_password)
             user = User(username=username,  password=password, email=email, address=address, pin_code=pin_code)
             db.session.add(user)

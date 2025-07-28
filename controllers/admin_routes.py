@@ -44,9 +44,13 @@ def setup_admin_routes(app):
     @app.route("/admin/lots/delete/<int:lot_id>")
     def delete_lot(lot_id):
         lot = ParkingLot.query.get_or_404(lot_id)
+        for spot in lot.spots:
+            if spot.status in ['R', 'O']:
+                return f"Cannot delete lot — spot {spot.id} is in use.", 400
+            db.session.delete(spot)
         db.session.delete(lot)
         db.session.commit()
-        return redirect(url_for('admin_dashboard'))
+        return redirect("/admin")
     
     @app.route("/admin/users")
     def list_users():
@@ -54,22 +58,19 @@ def setup_admin_routes(app):
         return render_template("user_list.html", users=users)
 
     @app.route("/admin/search", methods=["GET", "POST"])
-    def search():
-        lots = []
+    def admin_search():
+        if session.get("role") != "admin":
+            return redirect("/login")
+
+        results = []
         if request.method == "POST":
-            category = request.form["category"]
-            query = request.form["search_query"]
+            query = request.form["query"].strip()
+            results = ParkingSpot.query.join(ParkingLot).filter(
+                (ParkingSpot.id == query) |
+                (ParkingLot.prime_location_name.ilike(f"%{query}%"))
+            ).all()
+        return render_template("search.html", results=results)
 
-            if category == "user":
-                user = User.query.filter_by(id=query).first()
-                if user:
-                    reservations = Reservation.query.filter_by(user_id=user.id).all()
-                    lots = [res.spot.lot for res in reservations if res.spot and res.spot.lot]
-
-            elif category == "location":
-                lots = ParkingLot.query.filter(ParkingLot.prime_location_name.ilike(f"%{query}%")).all()
-
-        return render_template("search.html", lots=lots)
     @app.route("/admin/spot/<int:spot_id>")
     def view_spot(spot_id):
         spot = ParkingSpot.query.get_or_404(spot_id)
@@ -83,10 +84,19 @@ def setup_admin_routes(app):
 
     @app.route("/admin/spot/<int:spot_id>/delete")
     def delete_spot(spot_id):
+        if session.get("role") != "admin":
+            return redirect("/login")
         spot = ParkingSpot.query.get_or_404(spot_id)
         if spot.status == 'R':
-            return "Cannot delete an occupied spot."
+            return "Cannot delete an occupied spot", 400
+
+        if Reservation.query.filter_by(spot_id=spot.id).first():
+            return "Cannot delete spot — it is referenced in reservation history", 400
+
+        lot = spot.lot
         db.session.delete(spot)
+        if lot.maximum_number_of_spots > 0:
+            lot.maximum_number_of_spots -= 1
         db.session.commit()
         return redirect(f"/admin/lots/{spot.lot_id}/spots")
 
