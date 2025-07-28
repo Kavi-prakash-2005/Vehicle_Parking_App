@@ -15,10 +15,23 @@ def setup_user_routes(app):
         if request.method == "POST":
             username = request.form["username"]
             email = request.form["email"]
-            password = generate_password_hash(request.form["password"])
+            user_password = (request.form["password"])
             address = request.form["address"]
             pin_code = request.form["pin_code"]
+            if not username or not email or not user_password or not address or not pin_code:
+                return "All fields are required", 400
 
+            if len(user_password) < 6:
+                return "Password must be at least 6 characters", 400
+
+            if not pin_code.isdigit() or len(pin_code) != 6:
+                return "Pin code must be a 6-digit number", 400
+
+            if User.query.filter_by(username=username).first():
+                return "Username already exists", 400
+
+            # Passed validation → hash password and save
+            password = generate_password_hash(user_password)
             user = User(username=username,  password=password, email=email, address=address, pin_code=pin_code)
             db.session.add(user)
             db.session.commit()
@@ -31,6 +44,8 @@ def setup_user_routes(app):
         if request.method == "POST":
             username = request.form["username"]
             password = request.form["password"]
+            if not username or not password:
+                return "Username and password required", 400
 
             if username == "admin":
                 admin = Admin.query.filter_by(username="admin").first()
