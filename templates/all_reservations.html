@@ -1,41 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>All Parking Reservations</title>
+    <title>All Parking Reservations - Smart Parking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
-    <h2>All Parking Records</h2>
-    <table border="1" cellpadding="6">
-        <tr>
-            <th>ID</th>
-            <th>User ID</th>
-            <th>Spot ID</th>
-            <th>Lot</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Duration</th>
-            <th>Cost (₹)</th>
-        </tr>
-        {% for r in reservations %}
-        <tr>
-            <td>{{ r.id }}</td>
-            <td>{{ r.user_id }}</td>
-            <td>{{ r.spot_id }}</td>
-            <td>{{ r.spot.lot.prime_location_name }}</td>
-            <td>{{ r.parking_timestamp }}</td>
-            <td>{{ r.leaving_timestamp or "-" }}</td>
-            <td>
-                {% if r.leaving_timestamp %}
-                    {% set duration = (r.leaving_timestamp - r.parking_timestamp).total_seconds() / 3600 %}
-                    {{ duration|round(2) }} hr
-                {% else %}
-                    In Use
-                {% endif %}
-            </td>
-            <td>{{ r.parking_cost or "-" }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    <br><a href="/admin">← Back to Dashboard</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/admin">
+                <i class="fas fa-parking"></i> Parking Admin
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0"><i class="fas fa-list"></i> All Parking Records</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th><i class="fas fa-hashtag"></i> ID</th>
+                                <th><i class="fas fa-user"></i> User ID</th>
+                                <th><i class="fas fa-map-marker-alt"></i> Spot ID</th>
+                                <th><i class="fas fa-building"></i> Lot</th>
+                                <th><i class="fas fa-clock"></i> Start</th>
+                                <th><i class="fas fa-clock"></i> End</th>
+                                <th><i class="fas fa-hourglass-half"></i> Duration</th>
+                                <th><i class="fas fa-rupee-sign"></i> Cost (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Jinja2 template loop -->
+                            {% for r in reservations %}
+                            <tr>
+                                <td><span class="badge bg-primary">{{ r.id }}</span></td>
+                                <td>{{ r.user_id }}</td>
+                                <td><span class="badge bg-info">{{ r.spot_id }}</span></td>
+                                <td>{{ r.spot.lot.prime_location_name }}</td>
+                                <td><small class="text-muted">{{ r.parking_timestamp }}</small></td>
+                                <td>
+                                    {% if r.leaving_timestamp %}
+                                        <small class="text-muted">{{ r.leaving_timestamp }}</small>
+                                    {% else %}
+                                        <span class="badge bg-warning">Active</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if r.leaving_timestamp %}
+                                        {% set duration = (r.leaving_timestamp - r.parking_timestamp).total_seconds() / 3600 %}
+                                        <span class="badge bg-secondary">{{ duration|round(2) }} hr</span>
+                                    {% else %}
+                                        <span class="badge bg-success">In Use</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if r.parking_cost %}
+                                        <strong class="text-success">₹{{ r.parking_cost }}</strong>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    <a href="/admin" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

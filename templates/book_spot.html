@@ -1,22 +1,121 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Book Parking Spot</title>
+    <title>Book Parking Spot - Smart Parking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
-    <h2>Book the Parking Spot</h2>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/user/dashboard">
+                <i class="fas fa-parking me-2"></i>Smart Parking
+            </a>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/dashboard">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-    <form method="POST">
-        <p><strong>Lot Name:</strong> {{ lot.prime_location_name }}</p>
-        <p><strong>Spot ID:</strong> {{ spot.id }}</p>
-        <p><strong>Lot ID:</strong> {{ lot.id }}</p>
-        <p><strong>User ID:</strong> {{ user_id }}</p>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="main-container p-4">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-car fa-3x text-primary mb-3"></i>
+                        <h2 class="fw-bold text-primary">Book Parking Spot</h2>
+                        <p class="text-muted">Confirm your parking reservation</p>
+                    </div>
 
-        <label>Vehicle Number:</label><br>
-        <input type="text" name="vehicle_no" required><br><br>
+                    <div class="card card-custom mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Booking Details
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label text-muted">Lot Name</label>
+                                    <div class="fw-bold text-primary">
+                                        <i class="fas fa-map-marker-alt me-2"></i>{{ lot.prime_location_name }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label text-muted">Spot ID</label>
+                                    <div class="fw-bold">
+                                        <span class="badge bg-secondary fs-6">{{ spot.id }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label text-muted">Lot ID</label>
+                                    <div class="fw-bold">
+                                        <span class="badge bg-info fs-6">{{ lot.id }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label text-muted">User ID</label>
+                                    <div class="fw-bold">
+                                        <span class="badge bg-success fs-6">{{ user_id }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <button type="submit">Reserve</button>
-        <a href="/user/dashboard">Cancel</a>
-    </form>
+                    <!-- Booking Form -->
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <form method="POST">
+                                <div class="mb-4">
+                                    <label for="vehicle_no" class="form-label">
+                                        <i class="fas fa-car me-2"></i>Vehicle Number <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control form-control-custom" 
+                                           id="vehicle_no" name="vehicle_no" 
+                                           placeholder="Enter your vehicle number (e.g., KA01AB1234)" 
+                                           required>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>Enter your complete vehicle registration number
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6 mb-2">
+                                        <button type="submit" class="btn btn-outline-success btn-custom mt-auto w-100">
+                                            <i class="fas fa-check-circle me-2"></i>Confirm Reservation
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a href="/user/dashboard" class="btn btn-outline-danger btn-custom mt-auto w-100">
+                                            <i class="fas fa-times me-2"></i>Cancel
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Important Notes -->
+                    <div class="alert alert-info mt-4">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Important Notes:
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Your parking session will start immediately after confirmation</li>
+                            <li>Please ensure your vehicle number is correct</li>
+                            <li>You can release the spot anytime from your dashboard</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

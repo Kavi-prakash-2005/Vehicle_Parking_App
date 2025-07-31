@@ -1,24 +1,77 @@
 <!DOCTYPE html>
 <html>
-<head><title>Spot View</title></head>
-<body>
-    <h2>View/Delete Parking Spot</h2>
-    <p><strong>ID:</strong> {{ spot.id }}</p>
-    <p>
-        <strong>Status:</strong> 
-        {% if spot.status == 'R' %}
-            <a href="/admin/spot/{{ spot.id }}/details" style="color: red;">Occupied</a>
-        {% else %}
-            Available
-        {% endif %}
-    </p>
+<head>
+    <title>Spot View - Smart Parking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
 
-    {% if spot.status == 'A' %}
-        <a href="/admin/spot/{{ spot.id }}/delete" onclick="return confirm('Are you sure?')">🗑 Delete</a>
-    {% else %}
-        <p style="color:red;">Cannot delete an occupied spot.</p>
-    {% endif %}
-    <br><br>
-    <a href="/admin/lots/{{ spot.lot_id }}/spots">Close</a>
+<body>
+    <div class="container mb-5 pt-5">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0"><i class="fas fa-cog"></i> View/Delete Parking Spot</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card border-primary">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    <i class="fas fa-map-marker-alt"></i> Spot Details
+                                </h4>
+                                <p class="card-text">
+                                    <strong>ID:</strong> 
+                                    <span class="badge bg-primary fs-6">{{ spot.id }}</span>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Status:</strong>
+                                    {% if spot.status == 'R' %}
+                                        <a href="/admin/spot/{{ spot.id }}/details" class="badge bg-danger text-decoration-none fs-6">
+                                            <i class="fas fa-car"></i> Occupied
+                                        </a>
+                                    {% else %}
+                                        <span class="badge bg-success fs-6">
+                                            <i class="fas fa-check-circle"></i> Available
+                                        </span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-tools"></i> Actions
+                                </h5>
+                                {% if spot.status == 'A' %}
+                                    <a href="/admin/spot/{{ spot.id }}/delete" 
+                                    class="btn btn-danger" 
+                                    onclick="return confirm('Are you sure you want to delete this spot?')">
+                                        <i class="fas fa-trash"></i> Delete Spot
+                                    </a>
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Cannot delete an occupied spot.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="/admin/lots/{{ spot.lot_id }}/spots" class="btn btn-outline-primary">
+                        <i class="fas fa-times"></i> Close
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

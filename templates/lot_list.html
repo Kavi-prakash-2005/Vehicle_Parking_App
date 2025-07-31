@@ -2,32 +2,71 @@
 <html>
 <head>
     <title>Parking Lots</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
-    <h2>All Parking Lots</h2>
-    <a href="/admin/lots/create">+ Add Lot</a>
-    <br><br>
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>ID</th>
-            <th>Location</th>
-            <th>Spots</th>
-            <th>Price/hr</th>
-            <th>Actions</th>
-        </tr>
-        {% for lot in lots %}
-        <tr>
-            <td>{{ lot.id }}</td>
-            <td>{{ lot.prime_location_name }}</td>
-            <td>{{ lot.maximum_number_of_spots }}</td>
-            <td>₹{{ lot.price_per_hour }}</td>
-            <td>
-                <a href="/admin/lots/{{ lot.id }}/spots">View</a> |
-                <a href="/admin/lots/delete/{{ lot.id }}">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    <br><a href="/admin">← Back to Dashboard</a>
+    <div class="container mb-5 pt-5">
+        <div class="card shadow">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="mb-0"><i class="fas fa-building"></i> All Parking Lots</h2>
+                <a href="/admin/lots/create" class="btn btn-success">
+                    <i class="fas fa-plus me-2"></i>Add Lot
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th><i class="fas fa-hashtag"></i> ID</th>
+                                <th><i class="fas fa-map-marker-alt"></i> Location</th>
+                                <th><i class="fas fa-car"></i> Spots</th>
+                                <th><i class="fas fa-rupee-sign"></i> Price/hr</th>
+                                <th><i class="fas fa-cogs"></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lot in lots %}
+                            <tr>
+                                <td><span class="badge bg-primary">{{ lot.id }}</span></td>
+                                <td>
+                                    <i class="fas fa-building text-muted me-2"></i>
+                                    <strong>{{ lot.prime_location_name }}</strong>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ lot.maximum_number_of_spots }}</span>
+                                    <small class="text-muted">spots</small>
+                                </td>
+                                <td>
+                                    <span class="text-success fw-bold">₹{{ lot.price_per_hour }}</span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="/admin/lots/{{ lot.id }}/spots" class="btn btn-outline-primary">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                        <a href="/admin/lots/delete/{{ lot.id }}" 
+                                        class="btn btn-outline-danger"
+                                        onclick="return confirm('Are you sure you want to delete this lot?')">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    <a href="/admin" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>     
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> 
 </body>
 </html>

@@ -1,19 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Register</title>
+    <title>Register - Smart Parking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
-    <h2>User Registration</h2>
-    <form method="POST" action="/register">
-        <input type="text" name="username" placeholder="Username" required minlength="3">
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="password" placeholder="Password" required minlength="6">
-        <input type="text" name="address" placeholder="Address" required>
-        <input type="text" name="pin_code" required pattern="[0-9]{6}" title="Enter a valid 6-digit pin code">
-        <button type="submit">Register</button>
-    </form>
+    <div class="container pt-5 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="main-container card border border-secondary shadow-sm p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold text-primary">Create Account</h2>
+                        <p class="text-muted fw-bold">Join our parking management system</p>
+                    </div>
 
-    <p>Already have an account? <a href="/login">Login here</a></p>
+                    <form method="POST" action="/register">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label">
+                                    <i class="fas fa-user me-2"></i>Username
+                                </label>
+                                <input type="text" class="form-control form-control-custom" 
+                                       id="username" name="username" placeholder="Choose a username" 
+                                       required minlength="3">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">
+                                    <i class="fas fa-envelope me-2"></i>Email
+                                </label>
+                                <input type="email" class="form-control form-control-custom" 
+                                       id="email" name="email" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-2"></i>Password
+                            </label>
+                            <input type="password" class="form-control form-control-custom" 
+                                   id="password" name="password" placeholder="Create a password" 
+                                   required minlength="6">
+                            <div class="form-text">Password must be at least 6 characters long.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address" class="form-label">
+                                <i class="fas fa-map-marker-alt me-2"></i>Address
+                            </label>
+                            <textarea class="form-control form-control-custom" 
+                                      id="address" name="address" rows="3" 
+                                      placeholder="Enter your full address" required></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="pin_code" class="form-label">
+                                <i class="fas fa-map-pin me-2"></i>PIN Code
+                            </label>
+                            <input type="text" class="form-control form-control-custom" 
+                                   id="pin_code" name="pin_code" placeholder="6-digit PIN code" 
+                                   required pattern="[0-9]{6}" title="Enter a valid 6-digit pin code">
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-outline-primary btn-custom mt-auto">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center">
+                        <p class="text-muted">Already have an account? 
+                            <a href="/login" class="text-decoration-none fw-bold">Login here</a>
+                        </p>
+                        <a href="/" class="text-muted">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

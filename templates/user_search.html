@@ -1,41 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Search Parking Lots</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Parking - Smart Parking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
-    <h2>Search Parking Lots by Location or Pin Code</h2>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/user/dashboard">
+                <i class="fas fa-parking me-2"></i>Smart Parking
+            </a>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/dashboard">
+                        <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-    <form method="POST">
-        <input type="text" name="search" required>
-        <button type="submit">Search</button>
-    </form>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="main-container p-4">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                        <h2 class="fw-bold text-primary">Find Parking Spots</h2>
+                        <p class="text-muted">Search by location name or PIN code</p>
+                    </div>
 
-    {% if lots %}
-    <h3>Results:</h3>
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>ID</th>
-            <th>Address</th>
-            <th>Availability</th>
-            <th>Action</th>
-        </tr>
-        {% for lot in lots %}
-        <tr>
-            <td>{{ lot.id }}</td>
-            <td>{{ lot.address }}</td>
-            <td>
-                {{
-                    lot.maximum_number_of_spots
-                    - lot.spots|selectattr("status", "equalto", "R")|list|length
-                }}
-            </td>
-            <td><a href="/user/book/{{ lot.id }}">Book</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
+                    <!-- Search Form -->
+                    <div class="card card-custom mb-4">
+                        <div class="card-body">
+                            <form method="POST">
+                                <div class="row align-items-end">
+                                    <div class="col-md-8 mb-3 mb-md-0">
+                                        <label for="search" class="form-label">
+                                            <i class="fas fa-map-marker-alt me-2"></i>Location or PIN Code
+                                        </label>
+                                        <input type="text" class="form-control form-control-custom" 
+                                               id="search" name="search" 
+                                               placeholder="Enter location name or 6-digit PIN code" 
+                                               required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-outline-success btn-custom mt-auto">
+                                            <i class="fas fa-search me-2"></i>Search
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
-    <br><a href="/user/dashboard">← Back to Dashboard</a>
+                    <!-- Search Results -->
+                    {% if lots %}
+                    <div class="card card-custom">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-list me-2"></i>Available Parking Lots ({{ lots|length }} found)
+                            </h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th><i class="fas fa-hashtag me-1"></i>Lot ID</th>
+                                            <th><i class="fas fa-map-marker-alt me-1"></i>Address</th>
+                                            <th><i class="fas fa-parking me-1"></i>Available Spots</th>
+                                            <th><i class="fas fa-rupee-sign me-1"></i>Rate/Hour</th>
+                                            <th><i class="fas fa-cogs me-1"></i>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for lot in lots %}
+                                        {% set available_spots = lot.maximum_number_of_spots - lot.spots|selectattr("status", "equalto", "R")|list|length %}
+                                        <tr>
+                                            <td>
+                                                <span class="badge bg-primary">{{ lot.id }}</span>
+                                            </td>
+                                            <td>
+                                                <div class="fw-bold">{{ lot.prime_location_name }}</div>
+                                                <small class="text-muted">{{ lot.address }}</small>
+                                            </td>
+                                            <td>
+                                                {% if available_spots > 0 %}
+                                                    <span class="badge bg-success fs-6">
+                                                        <i class="fas fa-check-circle me-1"></i>{{ available_spots }} Available
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-danger fs-6">
+                                                        <i class="fas fa-times-circle me-1"></i>Full
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <strong class="text-success">₹{{ lot.price_per_hour }}</strong>
+                                            </td>
+                                            <td>
+                                                {% if available_spots > 0 %}
+                                                    <a href="/user/book/{{ lot.id }}" 
+                                                       class="btn btn-sm btn-primary-custom btn-custom">
+                                                        <i class="fas fa-car me-1"></i>Book Now
+                                                    </a>
+                                                {% else %}
+                                                    <button class="btn btn-sm btn-outline-secondary" disabled>
+                                                        <i class="fas fa-ban me-1"></i>Full
+                                                    </button>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% elif request.method == 'POST' %}
+                    <div class="card card-custom">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-search fa-4x text-muted mb-3"></i>
+                            <h4 class="text-muted">No Parking Lots Found</h4>
+                            <p class="text-muted">Try searching with a different location or PIN code</p>
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-lightbulb me-1"></i>
+                                    Tips: Try nearby areas or check the spelling
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="card card-custom">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-map-marked-alt fa-4x text-primary mb-3"></i>
+                            <h4 class="text-primary">Ready to Find Parking?</h4>
+                            <p class="text-muted">Enter your location above to discover available parking spots nearby</p>
+                            <div class="row mt-4">
+                                <div class="col-md-4">
+                                    <i class="fas fa-search fa-2x text-info mb-2"></i>
+                                    <h6>Search</h6>
+                                    <small class="text-muted">Find spots by location</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <i class="fas fa-eye fa-2x text-success mb-2"></i>
+                                    <h6>Compare</h6>
+                                    <small class="text-muted">Check availability & rates</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <i class="fas fa-car fa-2x text-warning mb-2"></i>
+                                    <h6>Book</h6>
+                                    <small class="text-muted">Reserve your spot instantly</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Back Button -->
+                    <div class="text-center mt-4">
+                        <a href="/user/dashboard" class="btn btn-outline-primary btn-custom">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

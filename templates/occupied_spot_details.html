@@ -1,15 +1,96 @@
 <!DOCTYPE html>
 <html>
-<head><title>Occupied Spot Details</title></head>
+<head>
+    <title>Occupied Spot Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
 <body>
-    <h2>Occupied Parking Spot Details</h2>
-
-    <p><strong>ID:</strong> {{ spot.id }}</p>
-    <p><strong>Customer ID:</strong> {{ reservation.user_id }}</p>
-    <p><strong>Date/Time of Parking:</strong> {{ reservation.parking_timestamp }}</p>
-    <p><strong>Estimated Cost:</strong> ₹{{ reservation.parking_cost or '—' }}</p>
-    <!-- Add more fields if available, e.g. vehicle no -->
-
-    <br><a href="/admin/spot/{{ spot.id }}">← Back</a>
+    <div class="container mb-5 pt-5">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="mb-0"><i class="fas fa-info-circle"></i> Occupied Parking Spot Details</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card border-warning">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-car"></i> Spot Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        <strong><i class="fas fa-hashtag text-muted me-2"></i>Spot ID:</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <span class="badge bg-primary fs-6">{{ spot.id }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        <strong><i class="fas fa-user text-muted me-2"></i>Customer ID:</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <span class="badge bg-info fs-6">{{ reservation.user_id }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        <strong><i class="fas fa-clock text-muted me-2"></i>Parked Since:</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <span class="text-muted">{{ reservation.parking_timestamp }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-sm-4">
+                                        <strong><i class="fas fa-rupee-sign text-muted me-2"></i>Estimated Cost:</strong>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        {% if reservation.parking_cost %}
+                                            <span class="text-success fw-bold fs-5">₹{{ reservation.parking_cost }}</span>
+                                        {% else %}
+                                            <span class="text-muted">—</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card border-info">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-chart-line"></i> Status
+                                </h6>
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-car fa-3x text-danger"></i>
+                                </div>
+                                <h5 class="text-danger">OCCUPIED</h5>
+                                <small class="text-muted">Spot is currently in use</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="/admin/spot/{{ spot.id }}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Spot
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> 
 </body>
 </html>

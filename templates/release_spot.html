@@ -1,20 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Release Parking Spot</title>
+    <title>Release Parking Spot - Smart Parking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
-    <h2>Release Parking Spot</h2>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/user/dashboard">
+                <i class="fas fa-parking me-2"></i>Smart Parking
+            </a>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/dashboard">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-    <form method="POST">
-        <p><strong>Spot ID:</strong> {{ spot.id }}</p>
-        <p><strong>Vehicle Number:</strong> XXXX</p> <!-- replace if tracked -->
-        <p><strong>Parking Time:</strong> {{ res.parking_timestamp }}</p>
-        <p><strong>Releasing Time:</strong> {{ res.leaving_timestamp or "Will be set now" }}</p>
-        <p><strong>Estimated Cost:</strong> Calculated on release</p>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="main-container p-4">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-sign-out-alt fa-3x text-warning mb-3"></i>
+                        <h2 class="fw-bold text-primary">Release Parking Spot</h2>
+                        <p class="text-muted">Complete your parking session</p>
+                    </div>
 
-        <button type="submit">Release</button>
-        <a href="/user/dashboard">Cancel</a>
-    </form>
+                    <div class="card card-custom mb-4">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">
+                                <i class="fas fa-clock me-2"></i>Parking Session Summary
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label text-muted">Spot ID</label>
+                                    <div class="fw-bold">
+                                        <span class="badge bg-secondary fs-6">{{ spot.id }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label text-muted">Vehicle Number</label>
+                                    <div class="fw-bold">
+                                        <i class="fas fa-car me-2 text-primary"></i>XXXX
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label text-muted">Parking Time</label>
+                                    <div class="fw-bold text-success">
+                                        <i class="fas fa-play me-2"></i>{{ res.parking_timestamp }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <label class="form-label text-muted">Release Time</label>
+                                    <div class="fw-bold text-info">
+                                        <i class="fas fa-stop me-2"></i>{{ res.leaving_timestamp or "Will be set now" }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-calculator fa-2x me-3"></i>
+                                    <div>
+                                        <h6 class="alert-heading mb-1">Estimated Cost</h6>
+                                        <p class="mb-0">Final amount will be calculated upon release based on actual duration</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Release Form -->
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <form method="POST">
+                                <div class="alert alert-warning">
+                                    <h6 class="alert-heading">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>Confirm Release
+                                    </h6>
+                                    <p class="mb-0">Once you release this spot, your parking session will end and the final cost will be calculated.</p>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6 mb-2">
+                                        <button type="submit" class="btn btn-warning btn-custom w-100">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Release Spot
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a href="/user/dashboard" class="btn btn-outline-danger btn-custom w-100">
+                                            <i class="fas fa-times me-2"></i>Cancel
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Billing Information -->
+                    <div class="alert alert-info mt-4">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-info-circle me-2"></i>Billing Information:
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Charges are calculated based on hourly rates</li>
+                            <li>Minimum billing is for 1 hour</li>
+                            <li>Payment summary will be shown after release</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -3,11 +3,26 @@
 <head>
     <title>User Summary</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <h2>Your Parking Usage Summary</h2>
 
-<canvas id="userChart" width="600" height="300"></canvas>
+<div class="container pt-5">
+    <h2 class="text-primary text-center mb-4">Your Parking Usage Summary</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5 bg-white p-3 rounded shadow-sm">
+            <canvas id="userChart" class="w-100" style="max-height: 250px;"></canvas>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/user/dashboard" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+</div>
 
 <script>
     const usageLabels = JSON.parse('{{ usage | map(attribute=0) | list | tojson | safe }}');
@@ -39,6 +54,5 @@
     });
 </script>
 
-<br><a href="/user/dashboard">← Back to Dashboard</a>
 </body>
 </html>
